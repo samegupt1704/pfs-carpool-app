@@ -4,701 +4,513 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PFS Carpool App</title>
-    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        .tab-button { transition: all 0.3s ease; }
+        .tab-button.active { background-color: #2563eb; color: white; }
+        .tab-button:not(.active) { color: #6b7280; }
+        .tab-button:not(.active):hover { background-color: #f3f4f6; }
+    </style>
 </head>
 <body>
-    <div id="root"></div>
+    <div id="app" class="min-h-screen bg-gray-50">
+        <!-- Header -->
+        <div class="bg-white shadow-sm border-b">
+            <div class="max-w-4xl mx-auto px-4 py-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="text-blue-600 mr-3 text-3xl">🚗</div>
+                        <div>
+                            <h1 class="text-2xl font-bold text-gray-900">PFS Carpool</h1>
+                            <p class="text-sm text-gray-600">Housing Complex Rideshare</p>
+                        </div>
+                    </div>
+                    <div class="text-right text-sm text-gray-600">
+                        <div>Prestige Ferns Residency</div>
+                        <div>Harlur Road, Bengaluru</div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <script type="text/babel">
-        const { useState } = React;
-        const { Car, MapPin, Clock, Users, Plus, Search, User, Phone, Calendar } = lucide;
+        <!-- Navigation -->
+        <div class="bg-white shadow-sm">
+            <div class="max-w-4xl mx-auto px-4 py-3">
+                <div class="flex space-x-2">
+                    <button onclick="showTab('browse')" id="browse-btn" class="tab-button active flex items-center px-4 py-2 rounded-lg">
+                        <span class="mr-2">🔍</span> Browse Rides
+                    </button>
+                    <button onclick="showTab('requests')" id="requests-btn" class="tab-button flex items-center px-4 py-2 rounded-lg">
+                        <span class="mr-2">👥</span> Ride Requests
+                    </button>
+                    <button onclick="showTab('offer')" id="offer-btn" class="tab-button flex items-center px-4 py-2 rounded-lg">
+                        <span class="mr-2">➕</span> Offer Ride
+                    </button>
+                    <button onclick="showTab('request')" id="request-btn" class="tab-button flex items-center px-4 py-2 rounded-lg">
+                        <span class="mr-2">👤</span> Request Ride
+                    </button>
+                </div>
+            </div>
+        </div>
 
-        const CarpoolApp = () => {
-            const [currentView, setCurrentView] = useState('browse');
-            const [rides, setRides] = useState([
-                {
-                    id: 1,
-                    driver: { name: 'Raj Kumar', phone: '+91 98765 43210', apartment: 'A-203' },
-                    from: 'PFS Complex',
-                    to: 'Electronic City',
-                    date: '2025-08-10',
-                    time: '09:00',
-                    availableSeats: 2,
-                    totalSeats: 4,
-                    pricePerSeat: 50,
-                    notes: 'Regular office commute, flexible timing ±15 mins'
-                },
-                {
-                    id: 2,
-                    driver: { name: 'Priya Singh', phone: '+91 87654 32109', apartment: 'B-105' },
-                    from: 'PFS Complex',
-                    to: 'Koramangala',
-                    date: '2025-08-10',
-                    time: '18:30',
-                    availableSeats: 3,
-                    totalSeats: 4,
-                    pricePerSeat: 40,
-                    notes: 'Evening return from work'
-                },
-                {
-                    id: 3,
-                    driver: { name: 'Amit Patel', phone: '+91 76543 21098', apartment: 'C-401' },
-                    from: 'PFS Complex',
-                    to: 'Whitefield',
-                    date: '2025-08-11',
-                    time: '08:00',
-                    availableSeats: 1,
-                    totalSeats: 4,
-                    pricePerSeat: 80,
-                    notes: 'Early morning tech park commute'
-                }
-            ]);
+        <!-- Main Content -->
+        <div class="max-w-4xl mx-auto px-4 py-6">
+            <!-- Browse Rides Tab -->
+            <div id="browse-tab" class="tab-content">
+                <div class="mb-6">
+                    <h2 class="text-xl font-semibold mb-4">Available Rides</h2>
+                    <div class="flex space-x-4 mb-4">
+                        <input type="text" id="search-input" placeholder="Search destination..." 
+                               class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <input type="date" id="date-filter" 
+                               class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
 
-            const [requests, setRequests] = useState([
-                {
-                    id: 1,
-                    passenger: { name: 'Sneha Reddy', phone: '+91 65432 10987', apartment: 'D-302' },
-                    from: 'PFS Complex',
-                    to: 'Indiranagar',
-                    date: '2025-08-10',
-                    time: '10:00',
-                    flexibleTime: true,
-                    passengers: 1,
-                    maxPrice: 60,
-                    notes: 'Hospital appointment, can adjust time by 30 mins'
-                },
-                {
-                    id: 2,
-                    passenger: { name: 'Vikram Joshi', phone: '+91 54321 09876', apartment: 'A-108' },
-                    from: 'PFS Complex',
-                    to: 'MG Road',
-                    date: '2025-08-10',
-                    time: '19:00',
-                    flexibleTime: false,
-                    passengers: 2,
-                    maxPrice: 45,
-                    notes: 'Shopping trip with family'
-                }
-            ]);
+                <div class="space-y-4" id="rides-container">
+                    <!-- Sample Rides -->
+                    <div class="bg-white rounded-lg shadow-sm border p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex-1">
+                                <div class="flex items-center mb-2">
+                                    <span class="text-gray-500 mr-2">📍</span>
+                                    <span class="font-medium">PFS Complex → Electronic City</span>
+                                </div>
+                                <div class="flex items-center space-x-4 text-sm text-gray-600">
+                                    <div class="flex items-center">
+                                        <span class="mr-1">📅</span> Aug 10, 2025
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="mr-1">🕘</span> 9:00 AM
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="mr-1">👥</span> 2 seats available
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-lg font-bold text-green-600">₹50</div>
+                                <div class="text-sm text-gray-500">per seat</div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div class="text-sm">
+                                <div class="font-medium">Raj Kumar</div>
+                                <div class="text-gray-600">A-203 • +91 98765 43210</div>
+                                <div class="text-gray-500 mt-1 italic">Regular office commute, flexible timing ±15 mins</div>
+                            </div>
+                            <button onclick="bookRide(1)" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium">
+                                Book Ride
+                            </button>
+                        </div>
+                    </div>
 
-            const [searchTerm, setSearchTerm] = useState('');
-            const [selectedDate, setSelectedDate] = useState('');
+                    <div class="bg-white rounded-lg shadow-sm border p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex-1">
+                                <div class="flex items-center mb-2">
+                                    <span class="text-gray-500 mr-2">📍</span>
+                                    <span class="font-medium">PFS Complex → Koramangala</span>
+                                </div>
+                                <div class="flex items-center space-x-4 text-sm text-gray-600">
+                                    <div class="flex items-center">
+                                        <span class="mr-1">📅</span> Aug 10, 2025
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="mr-1">🕕</span> 6:30 PM
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="mr-1">👥</span> 3 seats available
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-lg font-bold text-green-600">₹40</div>
+                                <div class="text-sm text-gray-500">per seat</div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div class="text-sm">
+                                <div class="font-medium">Priya Singh</div>
+                                <div class="text-gray-600">B-105 • +91 87654 32109</div>
+                                <div class="text-gray-500 mt-1 italic">Evening return from work</div>
+                            </div>
+                            <button onclick="bookRide(2)" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium">
+                                Book Ride
+                            </button>
+                        </div>
+                    </div>
 
-            const [offerForm, setOfferForm] = useState({
-                from: 'PFS Complex',
-                to: '',
-                date: '',
-                time: '',
-                availableSeats: 1,
-                pricePerSeat: '',
-                notes: '',
-                driverName: '',
-                phone: '',
-                apartment: ''
+                    <div class="bg-white rounded-lg shadow-sm border p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex-1">
+                                <div class="flex items-center mb-2">
+                                    <span class="text-gray-500 mr-2">📍</span>
+                                    <span class="font-medium">PFS Complex → Whitefield</span>
+                                </div>
+                                <div class="flex items-center space-x-4 text-sm text-gray-600">
+                                    <div class="flex items-center">
+                                        <span class="mr-1">📅</span> Aug 11, 2025
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="mr-1">🕗</span> 8:00 AM
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="mr-1">👥</span> 1 seat available
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-lg font-bold text-green-600">₹80</div>
+                                <div class="text-sm text-gray-500">per seat</div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div class="text-sm">
+                                <div class="font-medium">Amit Patel</div>
+                                <div class="text-gray-600">C-401 • +91 76543 21098</div>
+                                <div class="text-gray-500 mt-1 italic">Early morning tech park commute</div>
+                            </div>
+                            <button onclick="bookRide(3)" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium">
+                                Book Ride
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ride Requests Tab -->
+            <div id="requests-tab" class="tab-content hidden">
+                <div class="mb-6">
+                    <h2 class="text-xl font-semibold mb-4">Ride Requests</h2>
+                    <div class="flex space-x-4 mb-4">
+                        <input type="text" placeholder="Search destination..." 
+                               class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <input type="date" 
+                               class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="bg-white rounded-lg shadow-sm border p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex-1">
+                                <div class="flex items-center mb-2">
+                                    <span class="text-gray-500 mr-2">📍</span>
+                                    <span class="font-medium">PFS Complex → Indiranagar</span>
+                                </div>
+                                <div class="flex items-center space-x-4 text-sm text-gray-600">
+                                    <div class="flex items-center">
+                                        <span class="mr-1">📅</span> Aug 10, 2025
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="mr-1">🕙</span> 10:00 AM <span class="ml-1 text-green-600">±30min</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="mr-1">👥</span> 1 passenger
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-lg font-bold text-orange-600">₹60</div>
+                                <div class="text-sm text-gray-500">max per seat</div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div class="text-sm">
+                                <div class="font-medium">Sneha Reddy</div>
+                                <div class="text-gray-600">D-302 • +91 65432 10987</div>
+                                <div class="text-gray-500 mt-1 italic">Hospital appointment, can adjust time by 30 mins</div>
+                            </div>
+                            <button onclick="contactPassenger('Sneha Reddy', '+91 65432 10987')" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium">
+                                📞 Contact
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-lg shadow-sm border p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex-1">
+                                <div class="flex items-center mb-2">
+                                    <span class="text-gray-500 mr-2">📍</span>
+                                    <span class="font-medium">PFS Complex → MG Road</span>
+                                </div>
+                                <div class="flex items-center space-x-4 text-sm text-gray-600">
+                                    <div class="flex items-center">
+                                        <span class="mr-1">📅</span> Aug 10, 2025
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="mr-1">🕖</span> 7:00 PM
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="mr-1">👥</span> 2 passengers
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-lg font-bold text-orange-600">₹45</div>
+                                <div class="text-sm text-gray-500">max per seat</div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div class="text-sm">
+                                <div class="font-medium">Vikram Joshi</div>
+                                <div class="text-gray-600">A-108 • +91 54321 09876</div>
+                                <div class="text-gray-500 mt-1 italic">Shopping trip with family</div>
+                            </div>
+                            <button onclick="contactPassenger('Vikram Joshi', '+91 54321 09876')" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium">
+                                📞 Contact
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Offer Ride Tab -->
+            <div id="offer-tab" class="tab-content hidden">
+                <div class="bg-white rounded-lg shadow-sm border p-6">
+                    <h2 class="text-xl font-semibold mb-6">Offer a Ride</h2>
+                    <form onsubmit="submitOffer(event)" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Your Name</label>
+                                <input type="text" required name="driverName"
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                       placeholder="Enter your name">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                                <input type="tel" required name="phone"
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                       placeholder="+91 XXXXX XXXXX">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Apartment</label>
+                            <input type="text" required name="apartment"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                   placeholder="e.g., A-203">
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">From</label>
+                                <input type="text" name="from" value="PFS Complex"
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">To</label>
+                                <input type="text" required name="to"
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                       placeholder="Destination">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Date</label>
+                                <input type="date" required name="date"
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Time</label>
+                                <input type="time" required name="time"
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Available Seats</label>
+                                <select name="seats"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Price per Seat (₹)</label>
+                                <input type="number" required name="price"
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                       placeholder="0">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Additional Notes</label>
+                            <textarea name="notes" rows="3"
+                                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                      placeholder="Any special instructions, flexibility with timing, etc."></textarea>
+                        </div>
+
+                        <button type="submit"
+                                class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 font-medium">
+                            Offer Ride
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Request Ride Tab -->
+            <div id="request-tab" class="tab-content hidden">
+                <div class="bg-white rounded-lg shadow-sm border p-6">
+                    <h2 class="text-xl font-semibold mb-6">Request a Ride</h2>
+                    <form onsubmit="submitRequest(event)" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Your Name</label>
+                                <input type="text" required name="passengerName"
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                       placeholder="Enter your name">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                                <input type="tel" required name="phone"
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                       placeholder="+91 XXXXX XXXXX">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Apartment</label>
+                            <input type="text" required name="apartment"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                   placeholder="e.g., A-203">
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">From</label>
+                                <input type="text" name="from" value="PFS Complex"
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">To</label>
+                                <input type="text" required name="to"
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                       placeholder="Destination">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Date</label>
+                                <input type="date" required name="date"
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Preferred Time</label>
+                                <input type="time" required name="time"
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="flex items-center">
+                                <input type="checkbox" name="flexible" class="mr-2">
+                                <span class="text-sm text-gray-700">I'm flexible with timing (±30 minutes)</span>
+                            </label>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Number of Passengers</label>
+                                <select name="passengers"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Max Price per Seat (₹)</label>
+                                <input type="number" required name="maxPrice"
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                       placeholder="0">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Additional Notes</label>
+                            <textarea name="notes" rows="3"
+                                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                      placeholder="Any special requirements, purpose of trip, etc."></textarea>
+                        </div>
+
+                        <button type="submit"
+                                class="w-full bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700 font-medium">
+                            Submit Request
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab functionality
+        function showTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.add('hidden');
             });
-
-            const [requestForm, setRequestForm] = useState({
-                from: 'PFS Complex',
-                to: '',
-                date: '',
-                time: '',
-                flexibleTime: false,
-                passengers: 1,
-                maxPrice: '',
-                notes: '',
-                passengerName: '',
-                phone: '',
-                apartment: ''
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
             });
+            
+            // Show selected tab
+            document.getElementById(tabName + '-tab').classList.remove('hidden');
+            
+            // Add active class to selected button
+            document.getElementById(tabName + '-btn').classList.add('active');
+        }
 
-            const filteredRides = rides.filter(ride => {
-                const matchesSearch = ride.to.toLowerCase().includes(searchTerm.toLowerCase());
-                const matchesDate = !selectedDate || ride.date === selectedDate;
-                return matchesSearch && matchesDate;
-            });
+        // Form submissions
+        function submitOffer(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            alert(`Ride offer submitted successfully!\n\nFrom: ${formData.get('from')}\nTo: ${formData.get('to')}\nDate: ${formData.get('date')}\nTime: ${formData.get('time')}\nSeats: ${formData.get('seats')}\nPrice: ₹${formData.get('price')} per seat`);
+            event.target.reset();
+            showTab('browse');
+        }
 
-            const filteredRequests = requests.filter(request => {
-                const matchesSearch = request.to.toLowerCase().includes(searchTerm.toLowerCase());
-                const matchesDate = !selectedDate || request.date === selectedDate;
-                return matchesSearch && matchesDate;
-            });
+        function submitRequest(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            alert(`Ride request submitted successfully!\n\nFrom: ${formData.get('from')}\nTo: ${formData.get('to')}\nDate: ${formData.get('date')}\nTime: ${formData.get('time')}\nPassengers: ${formData.get('passengers')}\nMax Price: ₹${formData.get('maxPrice')} per seat`);
+            event.target.reset();
+            showTab('browse');
+        }
 
-            const submitOfferV2 = (e) => {
-                e.preventDefault();
-                const newRide = {
-                    id: rides.length + 1,
-                    driver: {
-                        name: offerForm.driverName,
-                        phone: offerForm.phone,
-                        apartment: offerForm.apartment
-                    },
-                    from: offerForm.from,
-                    to: offerForm.to,
-                    date: offerForm.date,
-                    time: offerForm.time,
-                    availableSeats: parseInt(offerForm.availableSeats),
-                    totalSeats: parseInt(offerForm.availableSeats),
-                    pricePerSeat: parseInt(offerForm.pricePerSeat),
-                    notes: offerForm.notes
-                };
-                
-                setRides([...rides, newRide]);
-                setOfferForm({
-                    from: 'PFS Complex',
-                    to: '',
-                    date: '',
-                    time: '',
-                    availableSeats: 1,
-                    pricePerSeat: '',
-                    notes: '',
-                    driverName: '',
-                    phone: '',
-                    apartment: ''
-                });
-                setCurrentView('browse');
-                alert('Ride offered successfully!');
-            };
+        // Ride interactions
+        function bookRide(rideId) {
+            alert(`Ride ${rideId} booked successfully! The driver will be notified and will contact you soon.`);
+        }
 
-            const submitRequestV2 = (e) => {
-                e.preventDefault();
-                const newRequest = {
-                    id: requests.length + 1,
-                    passenger: {
-                        name: requestForm.passengerName,
-                        phone: requestForm.phone,
-                        apartment: requestForm.apartment
-                    },
-                    from: requestForm.from,
-                    to: requestForm.to,
-                    date: requestForm.date,
-                    time: requestForm.time,
-                    flexibleTime: requestForm.flexibleTime,
-                    passengers: parseInt(requestForm.passengers),
-                    maxPrice: parseInt(requestForm.maxPrice),
-                    notes: requestForm.notes
-                };
-                
-                setRequests([...requests, newRequest]);
-                setRequestForm({
-                    from: 'PFS Complex',
-                    to: '',
-                    date: '',
-                    time: '',
-                    flexibleTime: false,
-                    passengers: 1,
-                    maxPrice: '',
-                    notes: '',
-                    passengerName: '',
-                    phone: '',
-                    apartment: ''
-                });
-                setCurrentView('browse');
-                alert('Ride request submitted successfully!');
-            };
+        function contactPassenger(name, phone) {
+            alert(`Contact ${name} at ${phone}`);
+        }
 
-            const bookRide = (rideId) => {
-                setRides(rides.map(ride => 
-                    ride.id === rideId 
-                        ? { ...ride, availableSeats: ride.availableSeats - 1 }
-                        : ride
-                ));
-                alert('Ride booked! Driver will be notified.');
-            };
+        // Search functionality
+        document.getElementById('search-input').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            // Simple search simulation - in a real app, this would filter the rides
+            console.log('Searching for:', searchTerm);
+        });
 
-            const NavButton = ({ view, icon: Icon, label, isActive }) => (
-                React.createElement('button', {
-                    onClick: () => setCurrentView(view),
-                    className: `flex items-center px-4 py-2 rounded-lg transition-colors ${
-                        isActive 
-                            ? 'bg-blue-600 text-white' 
-                            : 'text-gray-600 hover:bg-gray-100'
-                    }`
-                }, 
-                    React.createElement(Icon, { size: 18, className: "mr-2" }),
-                    label
-                )
-            );
-
-            return (
-                React.createElement('div', { className: "min-h-screen bg-gray-50" },
-                    // Header
-                    React.createElement('div', { className: "bg-white shadow-sm border-b" },
-                        React.createElement('div', { className: "max-w-4xl mx-auto px-4 py-4" },
-                            React.createElement('div', { className: "flex items-center justify-between" },
-                                React.createElement('div', { className: "flex items-center" },
-                                    React.createElement(Car, { className: "text-blue-600 mr-3", size: 32 }),
-                                    React.createElement('div', {},
-                                        React.createElement('h1', { className: "text-2xl font-bold text-gray-900" }, "PFS Carpool"),
-                                        React.createElement('p', { className: "text-sm text-gray-600" }, "Housing Complex Rideshare")
-                                    )
-                                ),
-                                React.createElement('div', { className: "text-right text-sm text-gray-600" },
-                                    React.createElement('div', {}, "Prestige Ferns Residency"),
-                                    React.createElement('div', {}, "Harlur Road, Bengaluru")
-                                )
-                            )
-                        )
-                    ),
-
-                    // Navigation
-                    React.createElement('div', { className: "bg-white shadow-sm" },
-                        React.createElement('div', { className: "max-w-4xl mx-auto px-4 py-3" },
-                            React.createElement('div', { className: "flex space-x-2" },
-                                React.createElement(NavButton, {
-                                    view: "browse",
-                                    icon: Search,
-                                    label: "Browse Rides",
-                                    isActive: currentView === 'browse'
-                                }),
-                                React.createElement(NavButton, {
-                                    view: "requests",
-                                    icon: Users,
-                                    label: "Ride Requests",
-                                    isActive: currentView === 'requests'
-                                }),
-                                React.createElement(NavButton, {
-                                    view: "offer",
-                                    icon: Plus,
-                                    label: "Offer Ride",
-                                    isActive: currentView === 'offer'
-                                }),
-                                React.createElement(NavButton, {
-                                    view: "request",
-                                    icon: User,
-                                    label: "Request Ride",
-                                    isActive: currentView === 'request'
-                                })
-                            )
-                        )
-                    ),
-
-                    // Main Content
-                    React.createElement('div', { className: "max-w-4xl mx-auto px-4 py-6" },
-                        // Browse Rides View
-                        currentView === 'browse' && React.createElement('div', {},
-                            React.createElement('div', { className: "mb-6" },
-                                React.createElement('h2', { className: "text-xl font-semibold mb-4" }, "Available Rides"),
-                                React.createElement('div', { className: "flex space-x-4 mb-4" },
-                                    React.createElement('div', { className: "flex-1" },
-                                        React.createElement('input', {
-                                            type: "text",
-                                            placeholder: "Search destination...",
-                                            value: searchTerm,
-                                            onChange: (e) => setSearchTerm(e.target.value),
-                                            className: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        })
-                                    ),
-                                    React.createElement('div', {},
-                                        React.createElement('input', {
-                                            type: "date",
-                                            value: selectedDate,
-                                            onChange: (e) => setSelectedDate(e.target.value),
-                                            className: "px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        })
-                                    )
-                                )
-                            ),
-                            React.createElement('div', { className: "space-y-4" },
-                                filteredRides.map(ride => 
-                                    React.createElement('div', { key: ride.id, className: "bg-white rounded-lg shadow-sm border p-6" },
-                                        React.createElement('div', { className: "flex justify-between items-start mb-4" },
-                                            React.createElement('div', { className: "flex-1" },
-                                                React.createElement('div', { className: "flex items-center mb-2" },
-                                                    React.createElement(MapPin, { size: 16, className: "text-gray-500 mr-2" }),
-                                                    React.createElement('span', { className: "font-medium" }, `${ride.from} → ${ride.to}`)
-                                                ),
-                                                React.createElement('div', { className: "flex items-center space-x-4 text-sm text-gray-600" },
-                                                    React.createElement('div', { className: "flex items-center" },
-                                                        React.createElement(Calendar, { size: 14, className: "mr-1" }),
-                                                        new Date(ride.date).toLocaleDateString('en-IN')
-                                                    ),
-                                                    React.createElement('div', { className: "flex items-center" },
-                                                        React.createElement(Clock, { size: 14, className: "mr-1" }),
-                                                        ride.time
-                                                    ),
-                                                    React.createElement('div', { className: "flex items-center" },
-                                                        React.createElement(Users, { size: 14, className: "mr-1" }),
-                                                        `${ride.availableSeats} seats available`
-                                                    )
-                                                )
-                                            ),
-                                            React.createElement('div', { className: "text-right" },
-                                                React.createElement('div', { className: "text-lg font-bold text-green-600" }, `₹${ride.pricePerSeat}`),
-                                                React.createElement('div', { className: "text-sm text-gray-500" }, "per seat")
-                                            )
-                                        ),
-                                        React.createElement('div', { className: "flex justify-between items-center" },
-                                            React.createElement('div', { className: "text-sm" },
-                                                React.createElement('div', { className: "font-medium" }, ride.driver.name),
-                                                React.createElement('div', { className: "text-gray-600" }, `${ride.driver.apartment} • ${ride.driver.phone}`),
-                                                ride.notes && React.createElement('div', { className: "text-gray-500 mt-1 italic" }, ride.notes)
-                                            ),
-                                            React.createElement('button', {
-                                                onClick: () => bookRide(ride.id),
-                                                disabled: ride.availableSeats === 0,
-                                                className: `px-4 py-2 rounded-lg font-medium ${
-                                                    ride.availableSeats > 0
-                                                        ? 'bg-blue-600 text-white hover:bg-blue-700'
-                                                        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                                }`
-                                            }, ride.availableSeats > 0 ? 'Book Ride' : 'Full')
-                                        )
-                                    )
-                                ),
-                                filteredRides.length === 0 && React.createElement('div', { className: "text-center py-8 text-gray-500" },
-                                    "No rides found. Try adjusting your search criteria."
-                                )
-                            )
-                        ),
-
-                        // Ride Requests View
-                        currentView === 'requests' && React.createElement('div', {},
-                            React.createElement('div', { className: "mb-6" },
-                                React.createElement('h2', { className: "text-xl font-semibold mb-4" }, "Ride Requests"),
-                                React.createElement('div', { className: "flex space-x-4 mb-4" },
-                                    React.createElement('div', { className: "flex-1" },
-                                        React.createElement('input', {
-                                            type: "text",
-                                            placeholder: "Search destination...",
-                                            value: searchTerm,
-                                            onChange: (e) => setSearchTerm(e.target.value),
-                                            className: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        })
-                                    ),
-                                    React.createElement('div', {},
-                                        React.createElement('input', {
-                                            type: "date",
-                                            value: selectedDate,
-                                            onChange: (e) => setSelectedDate(e.target.value),
-                                            className: "px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        })
-                                    )
-                                )
-                            ),
-                            React.createElement('div', { className: "space-y-4" },
-                                filteredRequests.map(request => 
-                                    React.createElement('div', { key: request.id, className: "bg-white rounded-lg shadow-sm border p-6" },
-                                        React.createElement('div', { className: "flex justify-between items-start mb-4" },
-                                            React.createElement('div', { className: "flex-1" },
-                                                React.createElement('div', { className: "flex items-center mb-2" },
-                                                    React.createElement(MapPin, { size: 16, className: "text-gray-500 mr-2" }),
-                                                    React.createElement('span', { className: "font-medium" }, `${request.from} → ${request.to}`)
-                                                ),
-                                                React.createElement('div', { className: "flex items-center space-x-4 text-sm text-gray-600" },
-                                                    React.createElement('div', { className: "flex items-center" },
-                                                        React.createElement(Calendar, { size: 14, className: "mr-1" }),
-                                                        new Date(request.date).toLocaleDateString('en-IN')
-                                                    ),
-                                                    React.createElement('div', { className: "flex items-center" },
-                                                        React.createElement(Clock, { size: 14, className: "mr-1" }),
-                                                        request.time,
-                                                        request.flexibleTime && React.createElement('span', { className: "ml-1 text-green-600" }, "±30min")
-                                                    ),
-                                                    React.createElement('div', { className: "flex items-center" },
-                                                        React.createElement(Users, { size: 14, className: "mr-1" }),
-                                                        `${request.passengers} passenger${request.passengers > 1 ? 's' : ''}`
-                                                    )
-                                                )
-                                            ),
-                                            React.createElement('div', { className: "text-right" },
-                                                React.createElement('div', { className: "text-lg font-bold text-orange-600" }, `₹${request.maxPrice}`),
-                                                React.createElement('div', { className: "text-sm text-gray-500" }, "max per seat")
-                                            )
-                                        ),
-                                        React.createElement('div', { className: "flex justify-between items-center" },
-                                            React.createElement('div', { className: "text-sm" },
-                                                React.createElement('div', { className: "font-medium" }, request.passenger.name),
-                                                React.createElement('div', { className: "text-gray-600" }, `${request.passenger.apartment} • ${request.passenger.phone}`),
-                                                request.notes && React.createElement('div', { className: "text-gray-500 mt-1 italic" }, request.notes)
-                                            ),
-                                            React.createElement('button', {
-                                                onClick: () => alert(`Contact ${request.passenger.name} at ${request.passenger.phone}`),
-                                                className: "px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium"
-                                            },
-                                                React.createElement(Phone, { size: 16, className: "inline mr-2" }),
-                                                "Contact"
-                                            )
-                                        )
-                                    )
-                                ),
-                                filteredRequests.length === 0 && React.createElement('div', { className: "text-center py-8 text-gray-500" },
-                                    "No ride requests found. Try adjusting your search criteria."
-                                )
-                            )
-                        ),
-
-                        // Offer Ride Form
-                        currentView === 'offer' && React.createElement('div', { className: "bg-white rounded-lg shadow-sm border p-6" },
-                            React.createElement('h2', { className: "text-xl font-semibold mb-6" }, "Offer a Ride"),
-                            React.createElement('form', { onSubmit: submitOfferV2, className: "space-y-4" },
-                                React.createElement('div', { className: "grid grid-cols-1 md:grid-cols-2 gap-4" },
-                                    React.createElement('div', {},
-                                        React.createElement('label', { className: "block text-sm font-medium text-gray-700 mb-2" }, "Your Name"),
-                                        React.createElement('input', {
-                                            type: "text",
-                                            required: true,
-                                            value: offerForm.driverName,
-                                            onChange: (e) => setOfferForm({...offerForm, driverName: e.target.value}),
-                                            className: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500",
-                                            placeholder: "Enter your name"
-                                        })
-                                    ),
-                                    React.createElement('div', {},
-                                        React.createElement('label', { className: "block text-sm font-medium text-gray-700 mb-2" }, "Phone Number"),
-                                        React.createElement('input', {
-                                            type: "tel",
-                                            required: true,
-                                            value: offerForm.phone,
-                                            onChange: (e) => setOfferForm({...offerForm, phone: e.target.value}),
-                                            className: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500",
-                                            placeholder: "+91 XXXXX XXXXX"
-                                        })
-                                    )
-                                ),
-                                React.createElement('div', {},
-                                    React.createElement('label', { className: "block text-sm font-medium text-gray-700 mb-2" }, "Apartment"),
-                                    React.createElement('input', {
-                                        type: "text",
-                                        required: true,
-                                        value: offerForm.apartment,
-                                        onChange: (e) => setOfferForm({...offerForm, apartment: e.target.value}),
-                                        className: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500",
-                                        placeholder: "e.g., A-203"
-                                    })
-                                ),
-                                React.createElement('div', { className: "grid grid-cols-1 md:grid-cols-2 gap-4" },
-                                    React.createElement('div', {},
-                                        React.createElement('label', { className: "block text-sm font-medium text-gray-700 mb-2" }, "From"),
-                                        React.createElement('input', {
-                                            type: "text",
-                                            value: offerForm.from,
-                                            onChange: (e) => setOfferForm({...offerForm, from: e.target.value}),
-                                            className: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        })
-                                    ),
-                                    React.createElement('div', {},
-                                        React.createElement('label', { className: "block text-sm font-medium text-gray-700 mb-2" }, "To"),
-                                        React.createElement('input', {
-                                            type: "text",
-                                            required: true,
-                                            value: offerForm.to,
-                                            onChange: (e) => setOfferForm({...offerForm, to: e.target.value}),
-                                            className: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500",
-                                            placeholder: "Destination"
-                                        })
-                                    )
-                                ),
-                                React.createElement('div', { className: "grid grid-cols-1 md:grid-cols-2 gap-4" },
-                                    React.createElement('div', {},
-                                        React.createElement('label', { className: "block text-sm font-medium text-gray-700 mb-2" }, "Date"),
-                                        React.createElement('input', {
-                                            type: "date",
-                                            required: true,
-                                            value: offerForm.date,
-                                            onChange: (e) => setOfferForm({...offerForm, date: e.target.value}),
-                                            className: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        })
-                                    ),
-                                    React.createElement('div', {},
-                                        React.createElement('label', { className: "block text-sm font-medium text-gray-700 mb-2" }, "Time"),
-                                        React.createElement('input', {
-                                            type: "time",
-                                            required: true,
-                                            value: offerForm.time,
-                                            onChange: (e) => setOfferForm({...offerForm, time: e.target.value}),
-                                            className: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        })
-                                    )
-                                ),
-                                React.createElement('div', { className: "grid grid-cols-1 md:grid-cols-2 gap-4" },
-                                    React.createElement('div', {},
-                                        React.createElement('label', { className: "block text-sm font-medium text-gray-700 mb-2" }, "Available Seats"),
-                                        React.createElement('select', {
-                                            value: offerForm.availableSeats,
-                                            onChange: (e) => setOfferForm({...offerForm, availableSeats: e.target.value}),
-                                            className: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        },
-                                            [1,2,3,4,5].map(num => 
-                                                React.createElement('option', { key: num, value: num }, num)
-                                            )
-                                        )
-                                    ),
-                                    React.createElement('div', {},
-                                        React.createElement('label', { className: "block text-sm font-medium text-gray-700 mb-2" }, "Price per Seat (₹)"),
-                                        React.createElement('input', {
-                                            type: "number",
-                                            required: true,
-                                            value: offerForm.pricePerSeat,
-                                            onChange: (e) => setOfferForm({...offerForm, pricePerSeat: e.target.value}),
-                                            className: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500",
-                                            placeholder: "0"
-                                        })
-                                    )
-                                ),
-                                React.createElement('div', {},
-                                    React.createElement('label', { className: "block text-sm font-medium text-gray-700 mb-2" }, "Additional Notes"),
-                                    React.createElement('textarea', {
-                                        value: offerForm.notes,
-                                        onChange: (e) => setOfferForm({...offerForm, notes: e.target.value}),
-                                        rows: 3,
-                                        className: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500",
-                                        placeholder: "Any special instructions, flexibility with timing, etc."
-                                    })
-                                ),
-                                React.createElement('button', {
-                                    type: "submit",
-                                    className: "w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 font-medium"
-                                }, "Offer Ride")
-                            )
-                        ),
-
-                        // Request Ride Form
-                        currentView === 'request' && React.createElement('div', { className: "bg-white rounded-lg shadow-sm border p-6" },
-                            React.createElement('h2', { className: "text-xl font-semibold mb-6" }, "Request a Ride"),
-                            React.createElement('form', { onSubmit: submitRequestV2, className: "space-y-4" },
-                                React.createElement('div', { className: "grid grid-cols-1 md:grid-cols-2 gap-4" },
-                                    React.createElement('div', {},
-                                        React.createElement('label', { className: "block text-sm font-medium text-gray-700 mb-2" }, "Your Name"),
-                                        React.createElement('input', {
-                                            type: "text",
-                                            required: true,
-                                            value: requestForm.passengerName,
-                                            onChange: (e) => setRequestForm({...requestForm, passengerName: e.target.value}),
-                                            className: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500",
-                                            placeholder: "Enter your name"
-                                        })
-                                    ),
-                                    React.createElement('div', {},
-                                        React.createElement('label', { className: "block text-sm font-medium text-gray-700 mb-2" }, "Phone Number"),
-                                        React.createElement('input', {
-                                            type: "tel",
-                                            require
-                                            required: true,
-                                           value: requestForm.phone,
-                                           onChange: (e) => setRequestForm({...requestForm, phone: e.target.value}),
-                                           className: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500",
-                                           placeholder: "+91 XXXXX XXXXX"
-                                       })
-                                   )
-                               ),
-                               React.createElement('div', {},
-                                   React.createElement('label', { className: "block text-sm font-medium text-gray-700 mb-2" }, "Apartment"),
-                                   React.createElement('input', {
-                                       type: "text",
-                                       required: true,
-                                       value: requestForm.apartment,
-                                       onChange: (e) => setRequestForm({...requestForm, apartment: e.target.value}),
-                                       className: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500",
-                                       placeholder: "e.g., A-203"
-                                   })
-                               ),
-                               React.createElement('div', { className: "grid grid-cols-1 md:grid-cols-2 gap-4" },
-                                   React.createElement('div', {},
-                                       React.createElement('label', { className: "block text-sm font-medium text-gray-700 mb-2" }, "From"),
-                                       React.createElement('input', {
-                                           type: "text",
-                                           value: requestForm.from,
-                                           onChange: (e) => setRequestForm({...requestForm, from: e.target.value}),
-                                           className: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                       })
-                                   ),
-                                   React.createElement('div', {},
-                                       React.createElement('label', { className: "block text-sm font-medium text-gray-700 mb-2" }, "To"),
-                                       React.createElement('input', {
-                                           type: "text",
-                                           required: true,
-                                           value: requestForm.to,
-                                           onChange: (e) => setRequestForm({...requestForm, to: e.target.value}),
-                                           className: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500",
-                                           placeholder: "Destination"
-                                       })
-                                   )
-                               ),
-                               React.createElement('div', { className: "grid grid-cols-1 md:grid-cols-2 gap-4" },
-                                   React.createElement('div', {},
-                                       React.createElement('label', { className: "block text-sm font-medium text-gray-700 mb-2" }, "Date"),
-                                       React.createElement('input', {
-                                           type: "date",
-                                           required: true,
-                                           value: requestForm.date,
-                                           onChange: (e) => setRequestForm({...requestForm, date: e.target.value}),
-                                           className: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                       })
-                                   ),
-                                   React.createElement('div', {},
-                                       React.createElement('label', { className: "block text-sm font-medium text-gray-700 mb-2" }, "Preferred Time"),
-                                       React.createElement('input', {
-                                           type: "time",
-                                           required: true,
-                                           value: requestForm.time,
-                                           onChange: (e) => setRequestForm({...requestForm, time: e.target.value}),
-                                           className: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                       })
-                                   )
-                               ),
-                               React.createElement('div', {},
-                                   React.createElement('label', { className: "flex items-center" },
-                                       React.createElement('input', {
-                                           type: "checkbox",
-                                           checked: requestForm.flexibleTime,
-                                           onChange: (e) => setRequestForm({...requestForm, flexibleTime: e.target.checked}),
-                                           className: "mr-2"
-                                       }),
-                                       React.createElement('span', { className: "text-sm text-gray-700" }, "I'm flexible with timing (±30 minutes)")
-                                   )
-                               ),
-                               React.createElement('div', { className: "grid grid-cols-1 md:grid-cols-2 gap-4" },
-                                   React.createElement('div', {},
-                                       React.createElement('label', { className: "block text-sm font-medium text-gray-700 mb-2" }, "Number of Passengers"),
-                                       React.createElement('select', {
-                                           value: requestForm.passengers,
-                                           onChange: (e) => setRequestForm({...requestForm, passengers: e.target.value}),
-                                           className: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                       },
-                                           [1,2,3,4].map(num => 
-                                               React.createElement('option', { key: num, value: num }, num)
-                                           )
-                                       )
-                                   ),
-                                   React.createElement('div', {},
-                                       React.createElement('label', { className: "block text-sm font-medium text-gray-700 mb-2" }, "Max Price per Seat (₹)"),
-                                       React.createElement('input', {
-                                           type: "number",
-                                           required: true,
-                                           value: requestForm.maxPrice,
-                                           onChange: (e) => setRequestForm({...requestForm, maxPrice: e.target.value}),
-                                           className: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500",
-                                           placeholder: "0"
-                                       })
-                                   )
-                               ),
-                               React.createElement('div', {},
-                                   React.createElement('label', { className: "block text-sm font-medium text-gray-700 mb-2" }, "Additional Notes"),
-                                   React.createElement('textarea', {
-                                       value: requestForm.notes,
-                                       onChange: (e) => setRequestForm({...requestForm, notes: e.target.value}),
-                                       rows: 3,
-                                       className: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500",
-                                       placeholder: "Any special requirements, purpose of trip, etc."
-                                   })
-                               ),
-                               React.createElement('button', {
-                                   type: "submit",
-                                   className: "w-full bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700 font-medium"
-                               }, "Submit Request")
-                           )
-                       )
-                   )
-               )
-           );
-       };
-
-       const root = ReactDOM.createRoot(document.getElementById('root'));
-       root.render(React.createElement(CarpoolApp));
-   </script>
+        // Date filter
+        document.getElementById('date-filter').addEventListener('change', function(e) {
+            const selectedDate = e.target.value;
+            // Simple date filter simulation - in a real app, this would filter the rides
+            console.log('Filtering by date:', selectedDate);
+        });
+    </script>
 </body>
 </html>
