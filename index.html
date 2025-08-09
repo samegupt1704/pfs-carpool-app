@@ -1,513 +1,518 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PFS Carpool App</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        .tab-button { transition: all 0.3s ease; }
-        .tab-button.active { background-color: #2563eb; color: white; }
-        .tab-button:not(.active) { color: #6b7280; }
-        .tab-button:not(.active):hover { background-color: #f3f4f6; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PFS Carpool App</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+.tab-button { transition: all 0.3s ease; }
+.tab-button.active { background-color: #2563eb; color: white; }
+.tab-button:not(.active) { color: #6b7280; }
+.tab-button:not(.active):hover { background-color: #f3f4f6; }
+</style>
 </head>
 <body>
-    <div id="app" class="min-h-screen bg-gray-50">
-        <!-- Header -->
-        <div class="bg-white shadow-sm border-b">
-            <div class="max-w-4xl mx-auto px-4 py-4">
-                <div class="flex items-center justify-between">
-    <div class="flex items-center">
-        <img src="PFS_Logo.jpg" alt="Purva Fountain Square" class="h-16 w-auto object-contain">
-    </div>
-    <div class="text-right text-sm text-gray-600">
-        <div>Purva Fountain Square</div>
-        <div>Marathahalli, Bengaluru</div>
-    </div>
-</div>    </div>
-                </div>
-            </div>
-        </div>
+<div id="app" class="min-h-screen bg-gray-50">
+<!-- Header -->
+<div class="bg-white shadow-sm border-b">
+<div class="max-w-4xl mx-auto px-4 py-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center">
+<div class="text-blue-600 mr-3 text-3xl">🚗</div>
+<div>
+                            <h1 class="text-2xl font-bold text-gray-900">PFS Carpool</h1>
+                            <p class="text-sm text-gray-600">Housing Complex Rideshare</p>
+                            <h1 class="text-2xl font-bold text-gray-900">Purva Fountain Square Carpool</h1>
+                            <p class="text-sm text-gray-600">Our Very Own Carpool</p>
+</div>
+</div>
+<div class="text-right text-sm text-gray-600">
+<div>Purva Fountain Square</div>
+<div>Marathahalli, Bengaluru</div>
+</div>
+</div>
+</div>
+</div>
 
-        <!-- Navigation -->
-        <div class="bg-white shadow-sm">
-            <div class="max-w-4xl mx-auto px-4 py-3">
-                <div class="flex space-x-2">
-                    <button onclick="showTab('browse')" id="browse-btn" class="tab-button active flex items-center px-4 py-2 rounded-lg">
-                        <span class="mr-2">🔍</span> Browse Rides
-                    </button>
-                    <button onclick="showTab('requests')" id="requests-btn" class="tab-button flex items-center px-4 py-2 rounded-lg">
-                        <span class="mr-2">👥</span> Ride Requests
-                    </button>
-                    <button onclick="showTab('offer')" id="offer-btn" class="tab-button flex items-center px-4 py-2 rounded-lg">
-                        <span class="mr-2">➕</span> Offer Ride
-                    </button>
-                    <button onclick="showTab('request')" id="request-btn" class="tab-button flex items-center px-4 py-2 rounded-lg">
-                        <span class="mr-2">👤</span> Request Ride
-                    </button>
-                </div>
-            </div>
-        </div>
+<!-- Navigation -->
+<div class="bg-white shadow-sm">
+<div class="max-w-4xl mx-auto px-4 py-3">
+<div class="flex space-x-2">
+<button onclick="showTab('browse')" id="browse-btn" class="tab-button active flex items-center px-4 py-2 rounded-lg">
+<span class="mr-2">🔍</span> Browse Rides
+</button>
+<button onclick="showTab('requests')" id="requests-btn" class="tab-button flex items-center px-4 py-2 rounded-lg">
+<span class="mr-2">👥</span> Ride Requests
+</button>
+<button onclick="showTab('offer')" id="offer-btn" class="tab-button flex items-center px-4 py-2 rounded-lg">
+<span class="mr-2">➕</span> Offer Ride
+</button>
+<button onclick="showTab('request')" id="request-btn" class="tab-button flex items-center px-4 py-2 rounded-lg">
+<span class="mr-2">👤</span> Request Ride
+</button>
+</div>
+</div>
+</div>
 
-        <!-- Main Content -->
-        <div class="max-w-4xl mx-auto px-4 py-6">
-            <!-- Browse Rides Tab -->
-            <div id="browse-tab" class="tab-content">
-                <div class="mb-6">
-                    <h2 class="text-xl font-semibold mb-4">Available Rides</h2>
-                    <div class="flex space-x-4 mb-4">
-                        <input type="text" id="search-input" placeholder="Search destination..." 
-                               class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <input type="date" id="date-filter" 
-                               class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-                </div>
+<!-- Main Content -->
+<div class="max-w-4xl mx-auto px-4 py-6">
+<!-- Browse Rides Tab -->
+<div id="browse-tab" class="tab-content">
+<div class="mb-6">
+<h2 class="text-xl font-semibold mb-4">Available Rides</h2>
+<div class="flex space-x-4 mb-4">
+<input type="text" id="search-input" placeholder="Search destination..." 
+class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+<input type="date" id="date-filter" 
+class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+</div>
+</div>
 
-                <div class="space-y-4" id="rides-container">
-                    <!-- Sample Rides -->
-                    <div class="bg-white rounded-lg shadow-sm border p-6">
-                        <div class="flex justify-between items-start mb-4">
-                            <div class="flex-1">
-                                <div class="flex items-center mb-2">
-                                    <span class="text-gray-500 mr-2">📍</span>
-                                    <span class="font-medium">PFS Complex → Electronic City</span>
-                                </div>
-                                <div class="flex items-center space-x-4 text-sm text-gray-600">
-                                    <div class="flex items-center">
-                                        <span class="mr-1">📅</span> Aug 10, 2025
-                                    </div>
-                                    <div class="flex items-center">
-                                        <span class="mr-1">🕘</span> 9:00 AM
-                                    </div>
-                                    <div class="flex items-center">
-                                        <span class="mr-1">👥</span> 2 seats available
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <div class="text-lg font-bold text-green-600">₹50</div>
-                                <div class="text-sm text-gray-500">per seat</div>
-                            </div>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <div class="text-sm">
-                                <div class="font-medium">Raj Kumar</div>
-                                <div class="text-gray-600">A-203 • +91 98765 43210</div>
-                                <div class="text-gray-500 mt-1 italic">Regular office commute, flexible timing ±15 mins</div>
-                            </div>
-                            <button onclick="bookRide(1)" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium">
-                                Book Ride
-                            </button>
-                        </div>
-                    </div>
+<div class="space-y-4" id="rides-container">
+<!-- Sample Rides -->
+<div class="bg-white rounded-lg shadow-sm border p-6">
+<div class="flex justify-between items-start mb-4">
+<div class="flex-1">
+<div class="flex items-center mb-2">
+<span class="text-gray-500 mr-2">📍</span>
+<span class="font-medium">PFS Complex → Electronic City</span>
+</div>
+<div class="flex items-center space-x-4 text-sm text-gray-600">
+<div class="flex items-center">
+<span class="mr-1">📅</span> Aug 10, 2025
+</div>
+<div class="flex items-center">
+<span class="mr-1">🕘</span> 9:00 AM
+</div>
+<div class="flex items-center">
+<span class="mr-1">👥</span> 2 seats available
+</div>
+</div>
+</div>
+<div class="text-right">
+<div class="text-lg font-bold text-green-600">₹50</div>
+<div class="text-sm text-gray-500">per seat</div>
+</div>
+</div>
+<div class="flex justify-between items-center">
+<div class="text-sm">
+<div class="font-medium">Raj Kumar</div>
+<div class="text-gray-600">A-203 • +91 98765 43210</div>
+<div class="text-gray-500 mt-1 italic">Regular office commute, flexible timing ±15 mins</div>
+</div>
+<button onclick="bookRide(1)" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium">
+Book Ride
+</button>
+</div>
+</div>
 
-                    <div class="bg-white rounded-lg shadow-sm border p-6">
-                        <div class="flex justify-between items-start mb-4">
-                            <div class="flex-1">
-                                <div class="flex items-center mb-2">
-                                    <span class="text-gray-500 mr-2">📍</span>
-                                    <span class="font-medium">PFS Complex → Koramangala</span>
-                                </div>
-                                <div class="flex items-center space-x-4 text-sm text-gray-600">
-                                    <div class="flex items-center">
-                                        <span class="mr-1">📅</span> Aug 10, 2025
-                                    </div>
-                                    <div class="flex items-center">
-                                        <span class="mr-1">🕕</span> 6:30 PM
-                                    </div>
-                                    <div class="flex items-center">
-                                        <span class="mr-1">👥</span> 3 seats available
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <div class="text-lg font-bold text-green-600">₹40</div>
-                                <div class="text-sm text-gray-500">per seat</div>
-                            </div>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <div class="text-sm">
-                                <div class="font-medium">Priya Singh</div>
-                                <div class="text-gray-600">B-105 • +91 87654 32109</div>
-                                <div class="text-gray-500 mt-1 italic">Evening return from work</div>
-                            </div>
-                            <button onclick="bookRide(2)" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium">
-                                Book Ride
-                            </button>
-                        </div>
-                    </div>
+<div class="bg-white rounded-lg shadow-sm border p-6">
+<div class="flex justify-between items-start mb-4">
+<div class="flex-1">
+<div class="flex items-center mb-2">
+<span class="text-gray-500 mr-2">📍</span>
+<span class="font-medium">PFS Complex → Koramangala</span>
+</div>
+<div class="flex items-center space-x-4 text-sm text-gray-600">
+<div class="flex items-center">
+<span class="mr-1">📅</span> Aug 10, 2025
+</div>
+<div class="flex items-center">
+<span class="mr-1">🕕</span> 6:30 PM
+</div>
+<div class="flex items-center">
+<span class="mr-1">👥</span> 3 seats available
+</div>
+</div>
+</div>
+<div class="text-right">
+<div class="text-lg font-bold text-green-600">₹40</div>
+<div class="text-sm text-gray-500">per seat</div>
+</div>
+</div>
+<div class="flex justify-between items-center">
+<div class="text-sm">
+<div class="font-medium">Priya Singh</div>
+<div class="text-gray-600">B-105 • +91 87654 32109</div>
+<div class="text-gray-500 mt-1 italic">Evening return from work</div>
+</div>
+<button onclick="bookRide(2)" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium">
+Book Ride
+</button>
+</div>
+</div>
 
-                    <div class="bg-white rounded-lg shadow-sm border p-6">
-                        <div class="flex justify-between items-start mb-4">
-                            <div class="flex-1">
-                                <div class="flex items-center mb-2">
-                                    <span class="text-gray-500 mr-2">📍</span>
-                                    <span class="font-medium">PFS Complex → Whitefield</span>
-                                </div>
-                                <div class="flex items-center space-x-4 text-sm text-gray-600">
-                                    <div class="flex items-center">
-                                        <span class="mr-1">📅</span> Aug 11, 2025
-                                    </div>
-                                    <div class="flex items-center">
-                                        <span class="mr-1">🕗</span> 8:00 AM
-                                    </div>
-                                    <div class="flex items-center">
-                                        <span class="mr-1">👥</span> 1 seat available
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <div class="text-lg font-bold text-green-600">₹80</div>
-                                <div class="text-sm text-gray-500">per seat</div>
-                            </div>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <div class="text-sm">
-                                <div class="font-medium">Amit Patel</div>
-                                <div class="text-gray-600">C-401 • +91 76543 21098</div>
-                                <div class="text-gray-500 mt-1 italic">Early morning tech park commute</div>
-                            </div>
-                            <button onclick="bookRide(3)" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium">
-                                Book Ride
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<div class="bg-white rounded-lg shadow-sm border p-6">
+<div class="flex justify-between items-start mb-4">
+<div class="flex-1">
+<div class="flex items-center mb-2">
+<span class="text-gray-500 mr-2">📍</span>
+<span class="font-medium">PFS Complex → Whitefield</span>
+</div>
+<div class="flex items-center space-x-4 text-sm text-gray-600">
+<div class="flex items-center">
+<span class="mr-1">📅</span> Aug 11, 2025
+</div>
+<div class="flex items-center">
+<span class="mr-1">🕗</span> 8:00 AM
+</div>
+<div class="flex items-center">
+<span class="mr-1">👥</span> 1 seat available
+</div>
+</div>
+</div>
+<div class="text-right">
+<div class="text-lg font-bold text-green-600">₹80</div>
+<div class="text-sm text-gray-500">per seat</div>
+</div>
+</div>
+<div class="flex justify-between items-center">
+<div class="text-sm">
+<div class="font-medium">Amit Patel</div>
+<div class="text-gray-600">C-401 • +91 76543 21098</div>
+<div class="text-gray-500 mt-1 italic">Early morning tech park commute</div>
+</div>
+<button onclick="bookRide(3)" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium">
+Book Ride
+</button>
+</div>
+</div>
+</div>
+</div>
 
-            <!-- Ride Requests Tab -->
-            <div id="requests-tab" class="tab-content hidden">
-                <div class="mb-6">
-                    <h2 class="text-xl font-semibold mb-4">Ride Requests</h2>
-                    <div class="flex space-x-4 mb-4">
-                        <input type="text" placeholder="Search destination..." 
-                               class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <input type="date" 
-                               class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-                </div>
+<!-- Ride Requests Tab -->
+<div id="requests-tab" class="tab-content hidden">
+<div class="mb-6">
+<h2 class="text-xl font-semibold mb-4">Ride Requests</h2>
+<div class="flex space-x-4 mb-4">
+<input type="text" placeholder="Search destination..." 
+class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+<input type="date" 
+class="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+</div>
+</div>
 
-                <div class="space-y-4">
-                    <div class="bg-white rounded-lg shadow-sm border p-6">
-                        <div class="flex justify-between items-start mb-4">
-                            <div class="flex-1">
-                                <div class="flex items-center mb-2">
-                                    <span class="text-gray-500 mr-2">📍</span>
-                                    <span class="font-medium">PFS Complex → Indiranagar</span>
-                                </div>
-                                <div class="flex items-center space-x-4 text-sm text-gray-600">
-                                    <div class="flex items-center">
-                                        <span class="mr-1">📅</span> Aug 10, 2025
-                                    </div>
-                                    <div class="flex items-center">
-                                        <span class="mr-1">🕙</span> 10:00 AM <span class="ml-1 text-green-600">±30min</span>
-                                    </div>
-                                    <div class="flex items-center">
-                                        <span class="mr-1">👥</span> 1 passenger
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <div class="text-lg font-bold text-orange-600">₹60</div>
-                                <div class="text-sm text-gray-500">max per seat</div>
-                            </div>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <div class="text-sm">
-                                <div class="font-medium">Sneha Reddy</div>
-                                <div class="text-gray-600">D-302 • +91 65432 10987</div>
-                                <div class="text-gray-500 mt-1 italic">Hospital appointment, can adjust time by 30 mins</div>
-                            </div>
-                            <button onclick="contactPassenger('Sneha Reddy', '+91 65432 10987')" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium">
-                                📞 Contact
-                            </button>
-                        </div>
-                    </div>
+<div class="space-y-4">
+<div class="bg-white rounded-lg shadow-sm border p-6">
+<div class="flex justify-between items-start mb-4">
+<div class="flex-1">
+<div class="flex items-center mb-2">
+<span class="text-gray-500 mr-2">📍</span>
+<span class="font-medium">PFS Complex → Indiranagar</span>
+</div>
+<div class="flex items-center space-x-4 text-sm text-gray-600">
+<div class="flex items-center">
+<span class="mr-1">📅</span> Aug 10, 2025
+</div>
+<div class="flex items-center">
+<span class="mr-1">🕙</span> 10:00 AM <span class="ml-1 text-green-600">±30min</span>
+</div>
+<div class="flex items-center">
+<span class="mr-1">👥</span> 1 passenger
+</div>
+</div>
+</div>
+<div class="text-right">
+<div class="text-lg font-bold text-orange-600">₹60</div>
+<div class="text-sm text-gray-500">max per seat</div>
+</div>
+</div>
+<div class="flex justify-between items-center">
+<div class="text-sm">
+<div class="font-medium">Sneha Reddy</div>
+<div class="text-gray-600">D-302 • +91 65432 10987</div>
+<div class="text-gray-500 mt-1 italic">Hospital appointment, can adjust time by 30 mins</div>
+</div>
+<button onclick="contactPassenger('Sneha Reddy', '+91 65432 10987')" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium">
+📞 Contact
+</button>
+</div>
+</div>
 
-                    <div class="bg-white rounded-lg shadow-sm border p-6">
-                        <div class="flex justify-between items-start mb-4">
-                            <div class="flex-1">
-                                <div class="flex items-center mb-2">
-                                    <span class="text-gray-500 mr-2">📍</span>
-                                    <span class="font-medium">PFS Complex → MG Road</span>
-                                </div>
-                                <div class="flex items-center space-x-4 text-sm text-gray-600">
-                                    <div class="flex items-center">
-                                        <span class="mr-1">📅</span> Aug 10, 2025
-                                    </div>
-                                    <div class="flex items-center">
-                                        <span class="mr-1">🕖</span> 7:00 PM
-                                    </div>
-                                    <div class="flex items-center">
-                                        <span class="mr-1">👥</span> 2 passengers
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <div class="text-lg font-bold text-orange-600">₹45</div>
-                                <div class="text-sm text-gray-500">max per seat</div>
-                            </div>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <div class="text-sm">
-                                <div class="font-medium">Vikram Joshi</div>
-                                <div class="text-gray-600">A-108 • +91 54321 09876</div>
-                                <div class="text-gray-500 mt-1 italic">Shopping trip with family</div>
-                            </div>
-                            <button onclick="contactPassenger('Vikram Joshi', '+91 54321 09876')" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium">
-                                📞 Contact
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<div class="bg-white rounded-lg shadow-sm border p-6">
+<div class="flex justify-between items-start mb-4">
+<div class="flex-1">
+<div class="flex items-center mb-2">
+<span class="text-gray-500 mr-2">📍</span>
+<span class="font-medium">PFS Complex → MG Road</span>
+</div>
+<div class="flex items-center space-x-4 text-sm text-gray-600">
+<div class="flex items-center">
+<span class="mr-1">📅</span> Aug 10, 2025
+</div>
+<div class="flex items-center">
+<span class="mr-1">🕖</span> 7:00 PM
+</div>
+<div class="flex items-center">
+<span class="mr-1">👥</span> 2 passengers
+</div>
+</div>
+</div>
+<div class="text-right">
+<div class="text-lg font-bold text-orange-600">₹45</div>
+<div class="text-sm text-gray-500">max per seat</div>
+</div>
+</div>
+<div class="flex justify-between items-center">
+<div class="text-sm">
+<div class="font-medium">Vikram Joshi</div>
+<div class="text-gray-600">A-108 • +91 54321 09876</div>
+<div class="text-gray-500 mt-1 italic">Shopping trip with family</div>
+</div>
+<button onclick="contactPassenger('Vikram Joshi', '+91 54321 09876')" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium">
+📞 Contact
+</button>
+</div>
+</div>
+</div>
+</div>
 
-            <!-- Offer Ride Tab -->
-            <div id="offer-tab" class="tab-content hidden">
-                <div class="bg-white rounded-lg shadow-sm border p-6">
-                    <h2 class="text-xl font-semibold mb-6">Offer a Ride</h2>
-                    <form onsubmit="submitOffer(event)" class="space-y-4">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Your Name</label>
-                                <input type="text" required name="driverName"
-                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                       placeholder="Enter your name">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
-                                <input type="tel" required name="phone"
-                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                       placeholder="+91 XXXXX XXXXX">
-                            </div>
-                        </div>
+<!-- Offer Ride Tab -->
+<div id="offer-tab" class="tab-content hidden">
+<div class="bg-white rounded-lg shadow-sm border p-6">
+<h2 class="text-xl font-semibold mb-6">Offer a Ride</h2>
+<form onsubmit="submitOffer(event)" class="space-y-4">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">Your Name</label>
+<input type="text" required name="driverName"
+class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+placeholder="Enter your name">
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+<input type="tel" required name="phone"
+class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+placeholder="+91 XXXXX XXXXX">
+</div>
+</div>
 
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Apartment</label>
-                            <input type="text" required name="apartment"
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                   placeholder="e.g., A-203">
-                        </div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">Apartment</label>
+<input type="text" required name="apartment"
+class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+placeholder="e.g., A-203">
+</div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">From</label>
-                                <input type="text" name="from" value="PFS Complex"
-                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">To</label>
-                                <input type="text" required name="to"
-                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                       placeholder="Destination">
-                            </div>
-                        </div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">From</label>
+<input type="text" name="from" value="PFS Complex"
+class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">To</label>
+<input type="text" required name="to"
+class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+placeholder="Destination">
+</div>
+</div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Date</label>
-                                <input type="date" required name="date"
-                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Time</label>
-                                <input type="time" required name="time"
-                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            </div>
-                        </div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">Date</label>
+<input type="date" required name="date"
+class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">Time</label>
+<input type="time" required name="time"
+class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+</div>
+</div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Available Seats</label>
-                                <select name="seats"
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Price per Seat (₹)</label>
-                                <input type="number" required name="price"
-                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                       placeholder="0">
-                            </div>
-                        </div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">Available Seats</label>
+<select name="seats"
+class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+</select>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">Price per Seat (₹)</label>
+<input type="number" required name="price"
+class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+placeholder="0">
+</div>
+</div>
 
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Additional Notes</label>
-                            <textarea name="notes" rows="3"
-                                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                      placeholder="Any special instructions, flexibility with timing, etc."></textarea>
-                        </div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">Additional Notes</label>
+<textarea name="notes" rows="3"
+class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+placeholder="Any special instructions, flexibility with timing, etc."></textarea>
+</div>
 
-                        <button type="submit"
-                                class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 font-medium">
-                            Offer Ride
-                        </button>
-                    </form>
-                </div>
-            </div>
+<button type="submit"
+class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 font-medium">
+Offer Ride
+</button>
+</form>
+</div>
+</div>
 
-            <!-- Request Ride Tab -->
-            <div id="request-tab" class="tab-content hidden">
-                <div class="bg-white rounded-lg shadow-sm border p-6">
-                    <h2 class="text-xl font-semibold mb-6">Request a Ride</h2>
-                    <form onsubmit="submitRequest(event)" class="space-y-4">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Your Name</label>
-                                <input type="text" required name="passengerName"
-                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                       placeholder="Enter your name">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
-                                <input type="tel" required name="phone"
-                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                       placeholder="+91 XXXXX XXXXX">
-                            </div>
-                        </div>
+<!-- Request Ride Tab -->
+<div id="request-tab" class="tab-content hidden">
+<div class="bg-white rounded-lg shadow-sm border p-6">
+<h2 class="text-xl font-semibold mb-6">Request a Ride</h2>
+<form onsubmit="submitRequest(event)" class="space-y-4">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">Your Name</label>
+<input type="text" required name="passengerName"
+class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+placeholder="Enter your name">
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+<input type="tel" required name="phone"
+class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+placeholder="+91 XXXXX XXXXX">
+</div>
+</div>
 
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Apartment</label>
-                            <input type="text" required name="apartment"
-                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                   placeholder="e.g., A-203">
-                        </div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">Apartment</label>
+<input type="text" required name="apartment"
+class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+placeholder="e.g., A-203">
+</div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">From</label>
-                                <input type="text" name="from" value="PFS Complex"
-                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">To</label>
-                                <input type="text" required name="to"
-                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                       placeholder="Destination">
-                            </div>
-                        </div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">From</label>
+<input type="text" name="from" value="PFS Complex"
+class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">To</label>
+<input type="text" required name="to"
+class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+placeholder="Destination">
+</div>
+</div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Date</label>
-                                <input type="date" required name="date"
-                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Preferred Time</label>
-                                <input type="time" required name="time"
-                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            </div>
-                        </div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">Date</label>
+<input type="date" required name="date"
+class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">Preferred Time</label>
+<input type="time" required name="time"
+class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+</div>
+</div>
 
-                        <div>
-                            <label class="flex items-center">
-                                <input type="checkbox" name="flexible" class="mr-2">
-                                <span class="text-sm text-gray-700">I'm flexible with timing (±30 minutes)</span>
-                            </label>
-                        </div>
+<div>
+<label class="flex items-center">
+<input type="checkbox" name="flexible" class="mr-2">
+<span class="text-sm text-gray-700">I'm flexible with timing (±30 minutes)</span>
+</label>
+</div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Number of Passengers</label>
-                                <select name="passengers"
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Max Price per Seat (₹)</label>
-                                <input type="number" required name="maxPrice"
-                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                       placeholder="0">
-                            </div>
-                        </div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">Number of Passengers</label>
+<select name="passengers"
+class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+</select>
+</div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">Max Price per Seat (₹)</label>
+<input type="number" required name="maxPrice"
+class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+placeholder="0">
+</div>
+</div>
 
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Additional Notes</label>
-                            <textarea name="notes" rows="3"
-                                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                      placeholder="Any special requirements, purpose of trip, etc."></textarea>
-                        </div>
+<div>
+<label class="block text-sm font-medium text-gray-700 mb-2">Additional Notes</label>
+<textarea name="notes" rows="3"
+class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+placeholder="Any special requirements, purpose of trip, etc."></textarea>
+</div>
 
-                        <button type="submit"
-                                class="w-full bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700 font-medium">
-                            Submit Request
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+<button type="submit"
+class="w-full bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700 font-medium">
+Submit Request
+</button>
+</form>
+</div>
+</div>
+</div>
+</div>
 
-    <script>
-        // Tab functionality
-        function showTab(tabName) {
-            // Hide all tab contents
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.add('hidden');
-            });
-            
-            // Remove active class from all buttons
-            document.querySelectorAll('.tab-button').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            // Show selected tab
-            document.getElementById(tabName + '-tab').classList.remove('hidden');
-            
-            // Add active class to selected button
-            document.getElementById(tabName + '-btn').classList.add('active');
-        }
+<script>
+// Tab functionality
+function showTab(tabName) {
+// Hide all tab contents
+document.querySelectorAll('.tab-content').forEach(tab => {
+tab.classList.add('hidden');
+});
 
-        // Form submissions
-        function submitOffer(event) {
-            event.preventDefault();
-            const formData = new FormData(event.target);
-            alert(`Ride offer submitted successfully!\n\nFrom: ${formData.get('from')}\nTo: ${formData.get('to')}\nDate: ${formData.get('date')}\nTime: ${formData.get('time')}\nSeats: ${formData.get('seats')}\nPrice: ₹${formData.get('price')} per seat`);
-            event.target.reset();
-            showTab('browse');
-        }
+// Remove active class from all buttons
+document.querySelectorAll('.tab-button').forEach(btn => {
+btn.classList.remove('active');
+});
 
-        function submitRequest(event) {
-            event.preventDefault();
-            const formData = new FormData(event.target);
-            alert(`Ride request submitted successfully!\n\nFrom: ${formData.get('from')}\nTo: ${formData.get('to')}\nDate: ${formData.get('date')}\nTime: ${formData.get('time')}\nPassengers: ${formData.get('passengers')}\nMax Price: ₹${formData.get('maxPrice')} per seat`);
-            event.target.reset();
-            showTab('browse');
-        }
+// Show selected tab
+document.getElementById(tabName + '-tab').classList.remove('hidden');
 
-        // Ride interactions
-        function bookRide(rideId) {
-            alert(`Ride ${rideId} booked successfully! The driver will be notified and will contact you soon.`);
-        }
+// Add active class to selected button
+document.getElementById(tabName + '-btn').classList.add('active');
+}
 
-        function contactPassenger(name, phone) {
-            alert(`Contact ${name} at ${phone}`);
-        }
+// Form submissions
+function submitOffer(event) {
+event.preventDefault();
+const formData = new FormData(event.target);
+alert(`Ride offer submitted successfully!\n\nFrom: ${formData.get('from')}\nTo: ${formData.get('to')}\nDate: ${formData.get('date')}\nTime: ${formData.get('time')}\nSeats: ${formData.get('seats')}\nPrice: ₹${formData.get('price')} per seat`);
+event.target.reset();
+showTab('browse');
+}
 
-        // Search functionality
-        document.getElementById('search-input').addEventListener('input', function(e) {
-            const searchTerm = e.target.value.toLowerCase();
-            // Simple search simulation - in a real app, this would filter the rides
-            console.log('Searching for:', searchTerm);
-        });
+function submitRequest(event) {
+event.preventDefault();
+const formData = new FormData(event.target);
+alert(`Ride request submitted successfully!\n\nFrom: ${formData.get('from')}\nTo: ${formData.get('to')}\nDate: ${formData.get('date')}\nTime: ${formData.get('time')}\nPassengers: ${formData.get('passengers')}\nMax Price: ₹${formData.get('maxPrice')} per seat`);
+event.target.reset();
+showTab('browse');
+}
 
-        // Date filter
-        document.getElementById('date-filter').addEventListener('change', function(e) {
-            const selectedDate = e.target.value;
-            // Simple date filter simulation - in a real app, this would filter the rides
-            console.log('Filtering by date:', selectedDate);
-        });
-    </script>
+// Ride interactions
+function bookRide(rideId) {
+alert(`Ride ${rideId} booked successfully! The driver will be notified and will contact you soon.`);
+}
+
+function contactPassenger(name, phone) {
+alert(`Contact ${name} at ${phone}`);
+}
+
+// Search functionality
+document.getElementById('search-input').addEventListener('input', function(e) {
+const searchTerm = e.target.value.toLowerCase();
+// Simple search simulation - in a real app, this would filter the rides
+console.log('Searching for:', searchTerm);
+});
+
+// Date filter
+document.getElementById('date-filter').addEventListener('change', function(e) {
+const selectedDate = e.target.value;
+// Simple date filter simulation - in a real app, this would filter the rides
+console.log('Filtering by date:', selectedDate);
+});
+</script>
 </body>
 </html>
